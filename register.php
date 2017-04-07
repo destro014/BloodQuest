@@ -74,7 +74,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
   <div class="module">
     <h1>Create an account</h1>
     <form class="form" action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" autocomplete="on">
-       <div class="alert alert-error"><?= $_SESSION['message']?></div>
+      <div class="alert alert-error"><?= $_SESSION['message']?></div>
       <table>
         <tr>
           <td><input type="text" placeholder="First name" name="firstname" required /></td>
@@ -95,47 +95,31 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         <td><input type="password" placeholder="Confirm Password" name="confirmpassword" autocomplete="new-password" required /></td>
         </tr>
         <tr>
-          <td>
-            <select  name="bloodgroup" required>
-              <option selected disabled="">Select Blood Group</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </td>
+          <td><input type="text" placeholder="Blood Group in capital letter" name="bloodgroup" required /></td>
         </tr>
         <tr>
-          <td>
-            <select  name="location" required>
-              <option selected disabled >Select Your Location</option>
-              <option value="Kathmandu">Kathmandu</option>
-              <option value="Bhaktapur">Bhaktapur</option>
-              <option value="Lalitpur">Lalitpur</option>
-            </select>
-        </td>
+          <td><input type="text" placeholder="Location" name="location" required /></td>
         </tr>
         <tr>
           <td><input type="number" placeholder="Phone Number:" name="phone" required /></td>
         </tr>
-        <tr>
-          <td><input type="text" placeholder="Gender" name="gender" required /></td>
-        </tr>
+         <tr> 
+           <td>Gender:<input type="radio" placeholder="Gender" name="gender" value="Female" required>Female
+                <input type="radio"  placeholder="Gender" name="gender" value="Male" required>Male<br><br>
+            </td>
+         </tr>   
+
       <tr>
           <td>
              <div class="avatar"><label>Select your avatar: </label><input type="file" name="avatar" accept="image/*" required /></div>
           </td>
         </tr>
+
         <tr>
           <td><input type="submit" value="Register" name="register" class="btn btn-block btn-primary" /></td>
         </tr>
       </table>
-      <!--Gender: &nbsp;<input type="radio" name="male"required> Male  &nbsp;&nbsp;
-              <input type="radio" required> Female <br>-->
+     
     </form>
   </div>
 </div>
