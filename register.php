@@ -2,20 +2,24 @@
 <?php
   session_start();
   $_SESSION['message']='';
-  $mysqli = new mysqli('localhost','root','Destro','blood');
+  //create connection
+  $conn = new mysqli('localhost','root','greenland','blood');
+  //check connection
+  if($conn->connect_error){
+  die("Connection Failed:".$conn->connect_error);
+}
 
-if($_SERVER['REQUEST_METHOD']=='POST'){  //  session_start();
-    $firstname=$mysqli->real_escape_string($_POST['firstname']);
-    $lastname=$mysqli->real_escape_string($_POST['lastname']);
-    $username=$mysqli->real_escape_string($_POST['username']);
-    $email=$mysqli->real_escape_string($_POST['email']);
-    $password=$mysqli->real_escape_string($_POST['password']);
-    $confirmpassword=$mysqli->real_escape_string($_POST['confirmpassword']);
-    $bloodgroup=$mysqli->real_escape_string($_POST['bloodgroup']);
-    $location=$mysqli->real_escape_string($_POST['location']);
-    $location=$mysqli->real_escape_string($_POST['location']);
-    $phone=$mysqli->real_escape_string($_POST['phone']);
-    $gender=$mysqli->real_escape_string($_POST['gender']);
+if($_SERVER['REQUEST_METHOD']=='POST'){  
+    $firstname=$conn->real_escape_string($_POST['firstname']);
+    $lastname=$conn->real_escape_string($_POST['lastname']);
+    $username=$conn->real_escape_string($_POST['username']);
+    $email=$conn->real_escape_string($_POST['email']);
+    $password=$conn->real_escape_string($_POST['password']);
+    $confirmpassword=$conn->real_escape_string($_POST['confirmpassword']);
+    $bloodgroup=$conn->real_escape_string($_POST['bloodgroup']);
+    $location=$conn->real_escape_string($_POST['location']);
+    $phone=$conn->real_escape_string($_POST['phone']);
+    $gender=$conn->real_escape_string($_POST['gender']);
 
     if($password==$confirmpassword){
       //create user
@@ -35,8 +39,15 @@ if($_SERVER['REQUEST_METHOD']=='POST'){  //  session_start();
         $_SESION['message']="Only upload image of .JIF, .JPG, .BMP images";
       }
 */
-      $sql = ("INSERT INTO users (firstname,lastname,username,email,password,bloodgroup,location,phone,gender)". "VALUES('$firstname','$lastname','$username','$email','$password','$bloodgroup','$location','$phone','$gender')");
-       //mysqli_query($db,$sql);
+      $sql = "INSERT INTO users (firstname,lastname,username,email,password,bloodgroup,location,phone,gender) VALUES('$firstname','$lastname','$username','$email','$password','$bloodgroup','$location','$phone','$gender')";
+       /*if($conn->query($sql)===true){
+        echo "New Record created successfully";
+       }
+
+       else{
+        echo"Echo:".$sql."<br>".$conn->error;
+       }*/
+       $conn->query($sql);
        $_SESSION['message']="You are now logged in !";
        $_SESSION['username']=$username;
        header("location:home.php");
@@ -62,7 +73,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){  //  session_start();
     <div class="body-content">
   <div class="module">
     <h1>Create an account</h1>
-    <form class="form" action="register.php" method="post" enctype="multipart/form-data" autocomplete="on">
+    <form class="form" action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" autocomplete="on">
       <div class="alert alert-error"><?= $_SESSION['message']?></div>
       <table>
         <tr>
