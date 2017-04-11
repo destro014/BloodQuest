@@ -6,6 +6,9 @@
   if(isset($_POST['register'])){
 header("location:register.php");
 }
+if(isset($_SESSION['username'])){
+    header('location:home.php');
+  }
 
 if($_SERVER['REQUEST_METHOD']=='POST'){  //  session_start();
 
