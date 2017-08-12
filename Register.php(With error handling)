@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<?php
+  session_start();
+  $_SESSION['message']='';
+  //create connection
+  $conn = new mysqli('localhost','root','greenland','blood');
+  //check connection
+  if($conn->connect_error){
+  die("Connection Failed:".$conn->connect_error);
+}
+
+// if($_SERVER['REQUEST_METHOD']=='POST'){  
+//     $firstname=$conn->real_escape_string($_POST['firstname']);
+//     $lastname=$conn->real_escape_string($_POST['lastname']);
+//     $username=$conn->real_escape_string($_POST['username']);
+//     $email=$conn->real_escape_string($_POST['email']);
+//     $password=$conn->real_escape_string($_POST['password']);
+//     $confirmpassword=$conn->real_escape_string($_POST['confirmpassword']);
+//     $bloodgroup=$conn->real_escape_string($_POST['bloodgroup']);
+//     $location=$conn->real_escape_string($_POST['location']);
+//     $phone=$conn->real_escape_string($_POST['phone']);
+//     $gender=$conn->real_escape_string($_POST['gender']);
+
+//     if($password==$confirmpassword){
+//       //create user
+//       $password=md5($password);  //hash form of password;
+//       $sql = "INSERT INTO users (firstname,lastname,username,email,password,bloodgroup,location,phone,gender) VALUES('$firstname','$lastname','$username','$email','$password','$bloodgroup','$location','$phone','$gender')";
+//        $conn->query($sql);
+//        $_SESSION['message']="You are now logged in !";
+//        $_SESSION['username']=$username;
+//        header("location:home.php");
+
+//     }
+//     else{
+//       //failed to create user
+//       $_SESSION['message']="Two password did not matched";
+//     }
+
+//   }
+
+//define variables and set to empty values
+$firstnameErr =$lastnameErr = $usernameErr = $emailErr = $passwordErr = $confirmpasswordErr = $bloodgroupErr = $locationErr = $phoneErr = $genderErr = "";
+$firstname = $lastname = $username = $email = $password = $confirmpassword = $bloodgroup = $location = $phone = $gender = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  if (empty($_POST["firstname"])) {
+    $firstnameErr = "First name is required";
+  } else {
+    $firstname = test_input($_POST["firstname"]);
+  }
+
+  if (empty($_POST["lastname"])) {
+    $lastnameErr = "Last name is required";
+  } else {
+    $lastname = test_input($_POST["lastname"]);
+  }
+
+  if (empty($_POST["username"])) {
+    $usernameErr = "User name is required";
+  } else {
+    $username = test_input($_POST["username"]);
+  }
+
+  if (empty($_POST["email"])) {
+    $emailErr = "Email is required";
+  } else {
+    $email = test_input($_POST["email"]);
+  }
+
+  if (empty($_POST["password"])) {
+    $passwordErr = "Password is required";
+  } else {
+    $password = test_input($_POST["password"]);
+  }
+
+  if (empty($_POST["confirmpassword"])) {
+    $confirmpasswordErr = "Please confirm the password";
+  } else {
+    $confirmpassword = test_input($_POST["confirmpassword"]);
+  }
+    
+  if (empty($_POST["bloodgroup"])) {
+    $bloodgroupErr= "Blood Group is required";
+  } else {
+    $bloodgroup = test_input($_POST["bloodgroup"]);
+  }
+
+  if (empty($_POST["location"])) {
+    $locationErr = "Location is required";
+  } else {
+    $location = test_input($_POST["location"]);
+  }
+
+   if (empty($_POST["phone"])) {
+    $phoneErr = "Phone is required";
+  } else {
+    $phone = test_input($_POST["phone"]);
+  }
+
+  if (empty($_POST["gender"])) {
+    $genderErr = "Gender is required";
+  } else {
+    $gender = test_input($_POST["gender"]);
+  }
+
+  if($password==$confirmpassword){
+      //create user
+      $password=md5($password);  //hash form of password;
+      $sql = "INSERT INTO users (firstname,lastname,username,email,password,bloodgroup,location,phone,gender) VALUES('$firstname','$lastname','$username','$email','$password','$bloodgroup','$location','$phone','$gender')";
+       $conn->query($sql);
+       $_SESSION['message']="You are now logged in !";
+       $_SESSION['username']=$username;
+       header("location:home.php");
+
+    }
+    else{
+      //failed to create user
+      $_SESSION['message']="Two password did not matched";
+    }
+
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+?>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="css/form.css">
+  </head>
+  <body>
+    <div class="body-content">
+  <div class="module">
+  <h1>Create an account</h1>
+    <form class="form" action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="post">
+      <div class="alert alert-error"><?= $_SESSION['message']?></div>
+        <tr>
+          <td><input type="text" placeholder="First name" name="firstname" /></td>
+          <td><span class="error"><?php echo $firstnameErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="last name" name="lastname" /></td>
+          <td><span class="error"><?php echo $lastnameErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="User Name" name="username" /></td>
+          <td><span class="error"><?php echo $usernameErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="email" placeholder="Email" name="email" /></td>
+          <td><span class="error"><?php echo $emailErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="password" placeholder="Password" name="password"  /></td>
+          <td><span class="error"><?php echo $passwordErr; ?></span></td>
+        </tr>
+        <tr
+        <td><input type="password" placeholder="Confirm Password" name="confirmpassword" /></td>
+           <td><span class="error"><?php echo $confirmpasswordErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="Blood Group in capital letter" name="bloodgroup"  /></td>
+          <td><span class="error"><?php echo $bloodgroupErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="text" placeholder="Location" name="location"  /></td>
+          <td><span class="error"><?php echo $loationErr; ?></span></td>
+        </tr>
+        <tr>
+          <td><input type="number" placeholder="Phone Number:" name="phone"  /></td>
+          <td><span class="error"><?php echo $phoneErr; ?></span></td>
+        </tr>
+        <br><br>
+        <tr>
+           <td>Gender:<input type="radio" placeholder="Gender" name="gender" value="Female" >Female
+                <input type="radio"  placeholder="Gender" name="gender" value="Male" >Male<br>
+                <td><span class="error"><?php echo $genderErr; ?></span></td>
+            </td>
+        </tr>
+        <tr>
+          <td>
+             <div class="avatar"><label>Select your avatar: </label><input type="file" name="avatar" accept="image/*" /></div>
+          </td>
+        </tr>
+
+        <tr>
+          <td><input type="submit" value="Register" name="register" class="btn btn-block btn-primary" /></td>
+        </tr>     
+    </form>
+  </div>
+</div>
+  </body>
+</html>
